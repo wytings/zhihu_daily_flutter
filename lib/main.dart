@@ -1,4 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:zhihu_daily_flutter/page/my_app.dart';
+import 'package:zhihu_daily_flutter/page/application.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(new Application());

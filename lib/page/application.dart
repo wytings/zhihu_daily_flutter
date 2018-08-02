@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
+import 'package:zhihu_daily_flutter/data/Data.dart';
+import 'package:zhihu_daily_flutter/data/data_manager.dart';
+import 'package:zhihu_daily_flutter/data/data_model.dart';
 
 class Application extends StatelessWidget {
   // This widget is the root of your application.
@@ -24,14 +26,18 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  final _themeModels = <ThemeModel>[];
 
-  final _suggestions = <WordPair>[];
-  final _saved = Set<WordPair>();
+  @override
+  void initState() {
+    super.initState();
+    _dispatchDataRequest();
+  }
 
-  void _incrementCounter() {
+  void _dispatchDataRequest() async {
+    final Data<List<ThemeModel>> data = await HttpManager.fetchThemeList();
     setState(() {
-      _counter++;
+      _themeModels.addAll(data.entity);
     });
   }
 
@@ -49,57 +55,33 @@ class _MyHomePageState extends State<MyHomePage> {
               'You have pushed the button this many times:',
             ),
             new Text(
-              '$_counter',
+              'Hello',
               style: Theme.of(context).textTheme.display1,
             ),
           ],
         ),
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
+      drawer: Drawer(
+        child: _buildList(),
       ),
-      drawer: Drawer(child: _buildList(),),
     );
   }
 
-
   Widget _buildList() {
-    print("in _buildList");
-    return ListView.builder(itemBuilder: (context, i) {
-      print("in itemBuilder");
-      if (i.isOdd) {
-        return Divider(
-          height: 1.0,
+    return ListView.builder(
+      itemBuilder: (context, i) {
+        final themeModel = _themeModels[i];
+        return ListTile(
+          title: Text("${themeModel.name}"),
+          trailing: Icon(
+            Icons.navigate_next,
+          ),
+          onTap: () {
+            setState(() {});
+          },
         );
-      }
-      final index = i ~/ 2;
-      if (index >= _suggestions.length) {
-        _suggestions.addAll(generateWordPairs().take(10));
-      }
-      return _buildRow(index);
-    });
-  }
-
-  Widget _buildRow(int index) {
-    final wordPair = _suggestions[index];
-    final alreadySaved = _saved.contains(wordPair);
-    return ListTile(
-      title: Text("$index-${wordPair.asPascalCase}"),
-      trailing: Icon(
-        alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
-      ),
-      onTap: () {
-        setState(() {
-          if (alreadySaved) {
-            _saved.remove(wordPair);
-          } else {
-            _saved.add(wordPair);
-          }
-        });
       },
+      itemCount: _themeModels.length,
     );
   }
 }

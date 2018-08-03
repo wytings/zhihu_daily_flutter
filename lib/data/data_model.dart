@@ -24,10 +24,10 @@ class ThemeStoryModel {
   ThemeStoryModel(this.images, this.type, this.id, this.title);
 
   ThemeStoryModel.fromJson(Map<String, dynamic> json)
-      : images = json["images"],
-        type = json["type"],
-        id = json["id"],
-        title = json["title"];
+      : images = _parseString(json["images"]),
+        type = json["type"].toString(),
+        id = json["id"].toString(),
+        title = json["title"].toString();
 }
 
 // 主题内容列表item数据的编辑映射模型
@@ -41,11 +41,11 @@ class ThemeEditorModel {
   ThemeEditorModel(this.url, this.bio, this.id, this.name, this.avatar);
 
   ThemeEditorModel.fromJson(Map<String, dynamic> json)
-      : url = json["url"],
-        bio = json["bio"],
-        id = json["id"],
-        avatar = json["avatar"],
-        name = json["name"];
+      : url = json["url"].toString(),
+        bio = json["bio"].toString(),
+        id = json["id"].toString(),
+        avatar = json["avatar"].toString(),
+        name = json["name"].toString();
 }
 
 // 主题Page数据映射模型
@@ -62,10 +62,10 @@ class ThemeDataModel {
 
   ThemeDataModel.fromJson(Map<String, dynamic> json)
       : stories = _parseStory(json["stories"]),
-        description = json["description"],
-        background = json["background"],
-        name = json["name"],
-        image = json["image"],
+        description = json["description"].toString(),
+        background = json["background"].toString(),
+        name = json["name"].toString(),
+        image = json["image"].toString(),
         editors = _parseEditor(json["editors"]);
 }
 
@@ -79,10 +79,10 @@ class TopStoryModel {
   TopStoryModel(this.image, this.type, this.id, this.title);
 
   TopStoryModel.fromJson(Map<String, dynamic> json)
-      : image = json["image"],
-        type = json["type"],
-        id = json["id"],
-        title = json["title"];
+      : image = json["image"].toString(),
+        type = json["type"].toString(),
+        id = json["id"].toString(),
+        title = json["title"].toString();
 }
 
 // 最新消息Page数据
@@ -96,7 +96,7 @@ class NewsDataModel {
   NewsDataModel.fromJson(Map<String, dynamic> json)
       : stories = _parseStory(json["stories"]),
         topStories = _parseTopStory(json["top_stories"]),
-        date = json["date"];
+        date = json["date"].toString();
 }
 
 // 最新消息Page的历史数据
@@ -108,7 +108,7 @@ class HistoryNewsModel {
 
   HistoryNewsModel.fromJson(Map<String, dynamic> json)
       : stories = _parseStory(json["stories"]),
-        date = json["date"];
+        date = json["date"].toString();
 }
 
 // 单个最新消息的数据
@@ -124,12 +124,12 @@ class SingleNewsDataModel {
       this.shareUrl, this.css);
 
   SingleNewsDataModel.fromJson(Map<String, dynamic> json)
-      : body = json["body"],
-        imageSource = json["image_source"],
-        image = json["image"],
-        title = json["title"],
-        shareUrl = json["share_url"],
-        css = json["css"];
+      : body = json["body"].toString(),
+        imageSource = json["image_source"].toString(),
+        image = json["image"].toString(),
+        title = json["title"].toString(),
+        shareUrl = json["share_url"].toString(),
+        css =  _parseString(json["css"]);
 }
 
 // 一个消息内容的评论和点赞数
@@ -164,28 +164,42 @@ class CommentModel {
       this.author, this.content, this.avatar, this.time, this.id, this.likes);
 
   CommentModel.fromJson(Map<String, dynamic> json)
-      : author = json["author"],
-        content = json["conent"],
-        avatar = json["avatar"],
+      : author = json["author"].toString(),
+        content = json["conent"].toString(),
+        avatar = json["avatar"].toString(),
         time = json["time"],
         id = json["id"],
         likes = json["likes"];
 }
 
 List<ThemeStoryModel> _parseStory(List list) {
-  return list.map((item) {
-    return new ThemeStoryModel.fromJson(item);
-  });
+  final List<ThemeStoryModel> modelList = [];
+  for (var map in list) {
+    modelList.add(ThemeStoryModel.fromJson(map));
+  }
+  return modelList;
 }
 
 List<ThemeEditorModel> _parseEditor(List list) {
-  return list.map((item) {
-    return new ThemeEditorModel.fromJson(item);
-  });
+  final List<ThemeEditorModel> modelList = [];
+  for (var map in list) {
+    modelList.add(ThemeEditorModel.fromJson(map));
+  }
+  return modelList;
 }
 
 List<TopStoryModel> _parseTopStory(List list) {
-  return list.map((item) {
-    return new TopStoryModel.fromJson(item);
-  });
+  final List<TopStoryModel> modelList = [];
+  for (var map in list) {
+    modelList.add(TopStoryModel.fromJson(map));
+  }
+  return modelList;
+}
+
+List<String> _parseString(List list) {
+  final List<String> modelList = [];
+  for (var map in list) {
+    modelList.add(map.toString());
+  }
+  return modelList;
 }

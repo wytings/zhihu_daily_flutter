@@ -2,31 +2,31 @@ import 'package:flutter/material.dart';
 import 'package:zhihu_daily_flutter/data/Data.dart';
 import 'package:zhihu_daily_flutter/data/data_manager.dart';
 import 'package:zhihu_daily_flutter/data/data_model.dart';
+import 'package:zhihu_daily_flutter/page/HomePage.dart';
+import 'package:zhihu_daily_flutter/page/SingleThemePage.dart';
 
 class Application extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: 'Flutter Demo',
-      theme: new ThemeData(
+      theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: AppPage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
+class AppPage extends StatefulWidget {
   @override
-  _MyHomePageState createState() => new _MyHomePageState();
+  _AppPageState createState() => new _AppPageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
+class _AppPageState extends State<AppPage> {
   final _themeModels = <ThemeModel>[];
+  ThemeModel currentThemeModel;
 
   @override
   void initState() {
@@ -37,6 +37,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void _dispatchDataRequest() async {
     final Data<List<ThemeModel>> data = await HttpManager.fetchThemeList();
     setState(() {
+      _themeModels.clear();
+      _themeModels.add(ThemeModel("", '首页', '', '首页'));
       _themeModels.addAll(data.entity);
     });
   }
@@ -45,29 +47,26 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text(widget.title),
+        title: new Text('Hello Flutter'),
       ),
-      body: new Center(
-        child: new Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
-            ),
-            new Text(
-              'Hello',
-              style: Theme.of(context).textTheme.display1,
-            ),
-          ],
-        ),
-      ),
+      body: _getBodyContentWidget(),
       drawer: Drawer(
-        child: _buildList(),
+        child: _getDrawerContentWidget(),
       ),
     );
   }
 
-  Widget _buildList() {
+  Widget _getBodyContentWidget() {
+    if (currentThemeModel == null || currentThemeModel.id.isEmpty) {
+      return HomePage();
+    }
+    return SingleThemePage();
+  }
+
+  Widget _getDrawerContentWidget() {
+    if (_themeModels.isEmpty) {
+      return Center(child: CircularProgressIndicator());
+    }
     return ListView.builder(
       itemBuilder: (context, i) {
         final themeModel = _themeModels[i];

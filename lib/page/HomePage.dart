@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:zhihu_daily_flutter/data/Data.dart';
 import 'package:zhihu_daily_flutter/data/data_manager.dart';
@@ -35,30 +34,57 @@ class _HomePageState extends State<HomePage> {
             child: PageView.builder(
               itemBuilder: (context, i) {
                 final top = model.topStories[i];
-                return Image.network(top.image,fit: BoxFit.cover,);
+                return Image.network(
+                  top.image,
+                  fit: BoxFit.cover,
+                );
               },
               itemCount: model.topStories.length,
             ),
           );
         } else if (model.type == TYPE_DATE) {
-          return Text(model.date);
+          final dateTime = DateTime.parse(model.date);
+          final dateString = "${dateTime.year }-${dateTime.month.toString()
+              .padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+
+          return Container(
+              padding: EdgeInsets.all(5.0),
+              child: SizedBox(
+                width: double.infinity,
+                height: 30.0,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    dateString,
+                  ),
+                ),
+              ));
         } else if (model.type == TYPE_STORY) {
           return GestureDetector(
             onTap: () {
-              print('current tap model = $model');
+              print('current tap model = ${model.story.title}');
             },
             child: Card(
+                child: Container(
+              padding: EdgeInsets.all(5.0),
               child: Row(
                 children: <Widget>[
-                  Text(model.story.title),
+                  Expanded(
+                    child: Text(
+                      model.story.title,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 15.0),
+                    ),
+                  ),
                   Image.network(
                     model.story.images[0],
-                    width: 200.0,
-                    height: 200.0,
+                    width: 100.0,
+                    height: 100.0,
                   ),
                 ],
               ),
-            ),
+            )),
           );
         } else {
           throw Exception('unsupported model = $model');

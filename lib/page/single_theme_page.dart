@@ -41,7 +41,7 @@ class _SingleThemePageState extends State<SingleThemePage> {
         } else if (model.type == _TYPE_EDITOR) {
           return _getEditorsRowWidget(model.editors);
         } else if (model.type == _TYPE_STORY) {
-          return getStoryContentWidget(model.story);
+          return getStoryContentWidget(context, model.story);
         } else {
           throw Exception('unsupported model = $model');
         }
@@ -76,6 +76,11 @@ class _SingleThemePageState extends State<SingleThemePage> {
             ),
           ));
     }
+    var editorList = editors[0].name;
+    editors.removeAt(0);
+    for (var model in editors) {
+      editorList += ',${model.name}';
+    }
 
     return Container(
         padding: EdgeInsets.all(5.0),
@@ -85,7 +90,7 @@ class _SingleThemePageState extends State<SingleThemePage> {
           child: Align(
             alignment: Alignment.centerLeft,
             child: Text(
-              editors[0].name,
+              editorList,
             ),
           ),
         ));

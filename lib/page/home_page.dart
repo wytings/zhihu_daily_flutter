@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:zhihu_daily_flutter/data/data_base.dart';
 import 'package:zhihu_daily_flutter/data/data_manager.dart';
 import 'package:zhihu_daily_flutter/data/data_model.dart';
+import 'package:zhihu_daily_flutter/page/story_detail_page.dart';
 import 'package:zhihu_daily_flutter/page/widget_helper.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,7 +34,7 @@ class _HomePageState extends State<HomePage> {
         } else if (model.type == _TYPE_DATE) {
           return _getDateRowWidget(model.date);
         } else if (model.type == _TYPE_STORY) {
-          return getStoryContentWidget(model.story);
+          return getStoryContentWidget(context, model.story);
         } else {
           throw Exception('unsupported model = $model');
         }
@@ -52,6 +53,7 @@ class _HomePageState extends State<HomePage> {
           return GestureDetector(
             onTap: () {
               print('${top.title} is clicked');
+              StoryDetailPage.push(context, top.title, top.id);
             },
             child: Image.network(
               top.image,

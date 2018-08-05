@@ -67,7 +67,8 @@ class _AppPageState extends State<AppPage> {
     if (currentThemeModel == null || currentThemeModel.id.isEmpty) {
       return HomePage();
     }
-    return SingleThemePage(id: currentThemeModel.id);
+    return SingleThemePage(
+        key: ValueKey(currentThemeModel.id), id: currentThemeModel.id);
   }
 
   Widget _getDrawerContentWidget() {

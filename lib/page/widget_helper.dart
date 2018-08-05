@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:zhihu_daily_flutter/data/data_model.dart';
+import 'package:zhihu_daily_flutter/page/story_detail_page.dart';
 
-Widget getStoryContentWidget(ThemeStoryModel story) {
+Widget getStoryContentWidget(BuildContext context, ThemeStoryModel story) {
   var maxLines = 2;
   var height = 60.0;
   if (story.images.isNotEmpty) {
@@ -36,6 +37,7 @@ Widget getStoryContentWidget(ThemeStoryModel story) {
   return GestureDetector(
     onTap: () {
       print('current tap model = ${story.title}');
+      StoryDetailPage.push(context, story.title, story.id);
     },
     child: Card(
         child: Container(

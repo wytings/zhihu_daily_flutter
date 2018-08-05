@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:http/http.dart' as http;
-import 'package:zhihu_daily_flutter/data/Data.dart';
+import 'package:zhihu_daily_flutter/data/data_base.dart';
 import 'package:zhihu_daily_flutter/data/data_model.dart';
 import 'dart:convert';
 
@@ -10,6 +10,7 @@ class HttpManager {
   static Future<Data<List<ThemeModel>>> fetchThemeList() async {
     final String url = "https://news-at.zhihu.com/api/4/themes";
     final Data<dynamic> data = await _fetchContent(url);
+    print("request url = $url, response  = $data");
     if (data.code == 0) {
       final List others = data.entity["others"];
       final List<ThemeModel> modelList = [];
@@ -24,8 +25,9 @@ class HttpManager {
 
   // 主题日报内容查看
   static Future<Data<ThemeDataModel>> fetchThemeData(String id) async {
-    final String url = "https://news-at.zhihu.com/api/4/themes/$id";
+    final String url = "https://news-at.zhihu.com/api/4/theme/$id";
     final Data<dynamic> data = await _fetchContent(url);
+    print("request url = $url, response  = $data");
     if (data.code == 0) {
       return new Data(0, "", ThemeDataModel.fromJson(data.entity));
     }
@@ -36,6 +38,7 @@ class HttpManager {
   static Future<Data<NewsDataModel>> fetchNewsData() async {
     final String url = "https://news-at.zhihu.com/api/4/news/latest";
     final Data<dynamic> data = await _fetchContent(url);
+    print("request url = $url, response  = $data");
     if (data.code == 0) {
       return new Data(0, "", NewsDataModel.fromJson(data.entity));
     }
@@ -46,6 +49,7 @@ class HttpManager {
   static Future<Data<SingleNewsDataModel>> fetchSingleNews(String id) async {
     final String url = "https://news-at.zhihu.com/api/4/news/$id";
     final Data<dynamic> data = await _fetchContent(url);
+    print("request url = $url, response  = $data");
     if (data.code == 0) {
       return new Data(0, "", SingleNewsDataModel.fromJson(data.entity));
     }
@@ -56,6 +60,7 @@ class HttpManager {
   static Future<Data<HistoryNewsModel>> fetchHistoryNews(String date) async {
     final String url = "https://news-at.zhihu.com/api/4/news/before/$date";
     final Data<dynamic> data = await _fetchContent(url);
+    print("request url = $url, response  = $data");
     if (data.code == 0) {
       return new Data(0, "", HistoryNewsModel.fromJson(data.entity));
     }
@@ -66,6 +71,7 @@ class HttpManager {
   static Future<Data<StoryExtraModel>> fetchStoryExtra(String id) async {
     final String url = "https://news-at.zhihu.com/api/4/story-extra/$id";
     final Data<dynamic> data = await _fetchContent(url);
+    print("request url = $url, response  = $data");
     if (data.code == 0) {
       return new Data(0, "", StoryExtraModel.fromJson(data.entity));
     }
@@ -77,6 +83,7 @@ class HttpManager {
     final String url =
         "https://news-at.zhihu.com/api/4/story/$id/long-comments";
     final Data<dynamic> data = await _fetchContent(url);
+    print("request url = $url, response  = $data");
     if (data.code == 0) {
       final List comments = data.entity["comments"];
       final List<CommentModel> result = comments.map((model) {
@@ -92,6 +99,7 @@ class HttpManager {
     final String url =
         "https://news-at.zhihu.com/api/4/story/$id/short-comments";
     final Data<dynamic> data = await _fetchContent(url);
+    print("request url = $url, response  = $data");
     if (data.code == 0) {
       final List comments = data.entity["comments"];
       final List<CommentModel> result = comments.map((model) {

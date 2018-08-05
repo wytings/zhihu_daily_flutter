@@ -129,7 +129,7 @@ class SingleNewsDataModel {
         image = json["image"].toString(),
         title = json["title"].toString(),
         shareUrl = json["share_url"].toString(),
-        css =  _parseString(json["css"]);
+        css = _parseString(json["css"]);
 }
 
 // 一个消息内容的评论和点赞数
@@ -173,6 +173,10 @@ class CommentModel {
 }
 
 List<ThemeStoryModel> _parseStory(List list) {
+  if (list == null || list.isEmpty) {
+    return [];
+  }
+
   final List<ThemeStoryModel> modelList = [];
   for (var map in list) {
     modelList.add(ThemeStoryModel.fromJson(map));
@@ -181,6 +185,10 @@ List<ThemeStoryModel> _parseStory(List list) {
 }
 
 List<ThemeEditorModel> _parseEditor(List list) {
+  if (list == null || list.isEmpty) {
+    return [];
+  }
+
   final List<ThemeEditorModel> modelList = [];
   for (var map in list) {
     modelList.add(ThemeEditorModel.fromJson(map));
@@ -189,6 +197,10 @@ List<ThemeEditorModel> _parseEditor(List list) {
 }
 
 List<TopStoryModel> _parseTopStory(List list) {
+  if (list == null || list.isEmpty) {
+    return [];
+  }
+
   final List<TopStoryModel> modelList = [];
   for (var map in list) {
     modelList.add(TopStoryModel.fromJson(map));
@@ -197,6 +209,10 @@ List<TopStoryModel> _parseTopStory(List list) {
 }
 
 List<String> _parseString(List list) {
+  if (list == null || list.isEmpty) {
+    return [];
+  }
+
   final List<String> modelList = [];
   for (var map in list) {
     modelList.add(map.toString());

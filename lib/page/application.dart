@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:zhihu_daily_flutter/data/Data.dart';
+import 'package:zhihu_daily_flutter/data/data_base.dart';
 import 'package:zhihu_daily_flutter/data/data_manager.dart';
 import 'package:zhihu_daily_flutter/data/data_model.dart';
-import 'package:zhihu_daily_flutter/page/HomePage.dart';
-import 'package:zhihu_daily_flutter/page/SingleThemePage.dart';
+import 'package:zhihu_daily_flutter/page/home_page.dart';
+import 'package:zhihu_daily_flutter/page/single_theme_page.dart';
 
 class Application extends StatelessWidget {
   // This widget is the root of your application.
@@ -43,11 +43,18 @@ class _AppPageState extends State<AppPage> {
     });
   }
 
+  String _getTitle() {
+    if (currentThemeModel == null) {
+      return '首页';
+    }
+    return currentThemeModel.name;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: new Text('Hello Flutter'),
+        title: new Text(_getTitle()),
       ),
       body: _getBodyContentWidget(),
       drawer: Drawer(
@@ -60,7 +67,7 @@ class _AppPageState extends State<AppPage> {
     if (currentThemeModel == null || currentThemeModel.id.isEmpty) {
       return HomePage();
     }
-    return SingleThemePage();
+    return SingleThemePage(id: currentThemeModel.id);
   }
 
   Widget _getDrawerContentWidget() {
@@ -76,7 +83,10 @@ class _AppPageState extends State<AppPage> {
             Icons.navigate_next,
           ),
           onTap: () {
-            setState(() {});
+            setState(() {
+              Navigator.of(context).pop();
+              currentThemeModel = themeModel;
+            });
           },
         );
       },
